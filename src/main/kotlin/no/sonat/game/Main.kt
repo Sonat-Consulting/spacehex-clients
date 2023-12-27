@@ -2,7 +2,7 @@ package no.sonat.game
 
 import org.slf4j.LoggerFactory
 
-fun main(args: Array<String>) {
+fun main() {
 
     val logger = LoggerFactory.getLogger("Main")
 
