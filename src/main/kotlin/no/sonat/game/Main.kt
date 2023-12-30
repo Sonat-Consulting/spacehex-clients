@@ -1,10 +1,12 @@
 package no.sonat.game
 
 import org.slf4j.LoggerFactory
+import java.util.concurrent.atomic.AtomicLong
+
+val logger = LoggerFactory.getLogger("Main")
 
 fun main() {
 
-    val logger = LoggerFactory.getLogger("Main")
 
     logger.info("Start client")
 
@@ -12,10 +14,21 @@ fun main() {
         wsUri = "ws://localhost:7070/test",
         room = "",
         name = "yolo",
-        strategy = { Acceleration(false,false,false) },
+        strategy = caclulateFlight,
         joinAction = {logger.info(it)}
     )
 
 
+}
+
+val count = AtomicLong(0)
+
+val caclulateFlight = { lander : Lander ->
+    val num = count.incrementAndGet()
+    logger.info("State $lander")
+    val left = (num/30L) % 2L == 0L
+    val right = (num/30L) % 2L == 1L
+    val up = lander.position.y < 200
+    Acceleration(up, left, right)
 }
 

@@ -1,5 +1,6 @@
 package no.sonat.game
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.neovisionaries.ws.client.*
@@ -10,6 +11,7 @@ enum class LanderStatus { FLYING, COMPLETED, CRASHED }
 data class Vec2D(
     val x:Double,
     val y:Double)
+
 
 data class Lander(
     val position : Vec2D,
@@ -24,6 +26,15 @@ data class Acceleration(
     val right : Boolean
 )
 
+data class Input(
+    val acceleration: Acceleration
+) {
+    val type = "input"
+}
+
+data class State(val lander: Lander) {
+    val type: String = "state"
+}
 class AgentClient(
     val wsUri : String,
     val room : String,
@@ -32,7 +43,9 @@ class AgentClient(
     val joinAction : (String) -> Unit = {}) {
 
     private val logger = LoggerFactory.getLogger("Agent")
-    val objectMapper = ObjectMapper().registerKotlinModule()
+    val objectMapper = ObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        .registerKotlinModule()
 
     val agent = WebSocketFactory()
         .createSocket(wsUri)
@@ -47,26 +60,39 @@ class AgentClient(
             }
 
             override fun onTextMessage(websocket: WebSocket, text: String) {
-                logger.info("Received: $text")
-                val response = objectMapper.readTree(text)
-                when(response.get("type").asText()) {
-                    "state" -> {
-                        val lander = objectMapper.readValue(text,Lander::class.java)
-                        val acceleration = strategy(lander)
-                        websocket.sendText(objectMapper.writeValueAsString(acceleration))
+                try {
+                    logger.info("Received: $text")
+                    val response = objectMapper.readTree(text)
+                    val type = response.get("type").asText()
+                    when (type) {
+                        "state" -> {
+                            val state = objectMapper.readValue(text, State::class.java)
+                            val acceleration = strategy(state.lander)
+                            logger.info("acceleration: $acceleration")
+                            websocket.sendText(objectMapper.writeValueAsString(Input(acceleration = acceleration)))
+                        }
+
+                        "join" -> {
+                            logger.info("start by visiting url {}", text)
+                            joinAction(text)
+                        }
+
+                        "end" -> {
+                            logger.info("Ended")
+                            websocket.disconnect()
+                        }
+
+                        "error" -> {
+                            logger.info("Game error {}", response)
+                            websocket.disconnect()
+                        }
+
+                        else -> {
+                            logger.warn("Got state with type {}", type)
+                        }
                     }
-                    "join" -> {
-                        logger.info("start by visiting url {}",text)
-                        joinAction(text)
-                    }
-                    "end" -> {
-                        logger.info("Ended")
-                        websocket.disconnect()
-                    }
-                    "error" -> {
-                        logger.info("Game error {}",response)
-                        websocket.disconnect()
-                    }
+                } catch (e : Exception) {
+                    logger.error("Unexpected",e)
                 }
             }
 
