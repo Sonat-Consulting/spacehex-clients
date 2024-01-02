@@ -28,7 +28,7 @@ val caclulateFlight = { lander : Lander ->
     logger.info("State $lander")
     val left = (num/30L) % 2L == 0L
     val right = (num/30L) % 2L == 1L
-    val up = lander.position.y < 200
+    val up = lander.position.y < 250
     Acceleration(up, left, right)
 }
 
