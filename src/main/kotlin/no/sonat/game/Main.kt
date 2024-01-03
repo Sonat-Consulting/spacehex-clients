@@ -24,7 +24,7 @@ fun main() {
 
 val count = AtomicLong(0)
 
-val caclulateFlight = { lander : Lander ->
+val caclulateFlight = { _: Environment, lander : Lander ->
     val num = count.incrementAndGet()
     logger.info("State $lander")
     val left = (num/30L) % 2L == 0L

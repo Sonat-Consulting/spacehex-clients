@@ -5,8 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.neovisionaries.ws.client.*
 import org.slf4j.LoggerFactory
+import java.util.concurrent.atomic.AtomicReference
 
-enum class LanderStatus { FLYING, COMPLETED, CRASHED }
+enum class LanderStatus { FLYING, COMPLETED, CRASHED, DID_NOT_FINISH }
 
 data class Vec2D(
     val x:Double,
@@ -36,17 +37,25 @@ data class State(val lander: Lander) {
     val type: String = "state"
 }
 
+data class Environment( val segments: List<LineSegment2D>, val goal : Vec2D) {
+    val type: String = "env"
+}
+
+data class LineSegment2D(val start : Vec2D, val end : Vec2D)
+
 class AgentClient(
     val wsUri : String,
     val room : String,
     val name : String,
-    val strategy : (state : Lander) -> Acceleration,
+    val strategy : (environment : Environment, state : Lander) -> Acceleration,
     val joinAction : (String) -> Unit = {}) {
 
     private val logger = LoggerFactory.getLogger("Agent")
     val objectMapper = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .registerKotlinModule()
+
+    val currentEnvironment = AtomicReference<Environment>(null)
 
     val agent = WebSocketFactory()
         .createSocket(wsUri)
@@ -72,9 +81,13 @@ class AgentClient(
                     val response = objectMapper.readTree(text)
                     val type = response.get("type").asText()
                     when (type) {
+                        "env" -> {
+                            val environment = objectMapper.readValue(text, Environment::class.java)
+                            currentEnvironment.set(environment)
+                        }
                         "state" -> {
                             val state = objectMapper.readValue(text, State::class.java)
-                            val acceleration = strategy(state.lander)
+                            val acceleration = strategy(currentEnvironment.get(),state.lander)
                             logger.info("acceleration: $acceleration")
                             websocket.sendText(objectMapper.writeValueAsString(Input(acceleration = acceleration)))
                         }
