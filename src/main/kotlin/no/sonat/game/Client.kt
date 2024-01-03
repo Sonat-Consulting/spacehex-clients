@@ -33,11 +33,19 @@ data class Input(
     val type = "input"
 }
 
+data class Constants(
+    val timeDeltaSeconds : Double = 0.1,
+    val gravity : Double =  10.0,
+    val landerAccelerationLeft : Double = 5.0,
+    val landerAccelerationRight : Double = 5.0,
+    val landerAccelerationUp : Double = 15.0,
+)
+
 data class State(val lander: Lander) {
     val type: String = "state"
 }
 
-data class Environment( val segments: List<LineSegment2D>, val goal : Vec2D) {
+data class Environment(val segments: List<LineSegment2D>, val goal : Vec2D, val constants: Constants ) {
     val type: String = "env"
 }
 
