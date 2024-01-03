@@ -35,6 +35,7 @@ data class Input(
 data class State(val lander: Lander) {
     val type: String = "state"
 }
+
 class AgentClient(
     val wsUri : String,
     val room : String,
@@ -54,7 +55,13 @@ class AgentClient(
         .addListener(object : WebSocketAdapter() {
 
             override fun onConnected(websocket: WebSocket, headers: MutableMap<String, MutableList<String>>) {
-                val msg = objectMapper.writeValueAsString(mapOf("type" to "join", "name" to name) )
+                val msg = objectMapper.writeValueAsString(
+                    mapOf(
+                        "type" to "join",
+                        "name" to name,
+                        "gameId" to room
+                    )
+                )
                 logger.info(msg)
                 websocket.sendText(msg)
             }

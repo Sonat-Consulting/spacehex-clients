@@ -7,15 +7,16 @@ val logger = LoggerFactory.getLogger("Main")
 
 fun main() {
 
-
     logger.info("Start client")
 
     val ag = AgentClient(
         wsUri = "ws://localhost:7070/test",
-        room = "",
-        name = "yolo",
+        room = "ignore-for-test",
+        name = "Team s0nat",
         strategy = caclulateFlight,
-        joinAction = {logger.info(it)}
+        joinAction = {
+            logger.info(it)
+        }
     )
 
 
