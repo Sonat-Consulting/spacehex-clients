@@ -67,7 +67,7 @@ class AgentClient(
 
     val agent = WebSocketFactory()
         .createSocket(wsUri)
-        .setPingInterval(60*1000)
+        .setPingInterval(15*1000)
         .setPingPayloadGenerator { "PING".toByteArray() }
         .addListener(object : WebSocketAdapter() {
 
@@ -99,22 +99,14 @@ class AgentClient(
                             logger.info("acceleration: $acceleration")
                             websocket.sendText(objectMapper.writeValueAsString(Input(acceleration = acceleration)))
                         }
-
                         "join" -> {
                             logger.info("start by visiting url {}", text)
                             joinAction(text)
                         }
-
-                        "end" -> {
-                            logger.info("Ended")
-                            websocket.disconnect()
-                        }
-
                         "error" -> {
                             logger.info("Game error {}", response)
                             websocket.disconnect()
                         }
-
                         else -> {
                             logger.warn("Got state with type {}", type)
                         }
@@ -133,7 +125,7 @@ class AgentClient(
             }
 
             override fun onPongFrame(websocket: WebSocket, frame: WebSocketFrame) {
-                logger.info("Got pong ? ${frame.payload}")
+                logger.info("Got pong ${String(frame.payload)}")
             }
         })
         .connect()

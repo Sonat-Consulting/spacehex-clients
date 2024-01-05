@@ -1,16 +1,13 @@
 package no.sonat.game
 
 import org.slf4j.LoggerFactory
-import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.abs
 
 val logger = LoggerFactory.getLogger("Main")
 
 fun main() {
-
     logger.info("Start client")
-
     val ag = AgentClient(
         wsUri = "ws://localhost:7070/test",
         room = "ignore-for-test",
@@ -20,11 +17,8 @@ fun main() {
             logger.info(it)
         }
     )
-
-
 }
 
-val count = AtomicLong(0)
 val previousXError = AtomicReference(0.0)
 val previousYError = AtomicReference(0.0)
 
@@ -36,12 +30,12 @@ fun calculateFlight( env: Environment, lander : Lander) : Acceleration {
         val deriv = ((eT - previousXError.get())/env.constants.timeDeltaSeconds)*wA
         previousXError.set(eT)
         if(eT + deriv > 0.0) {
-            Acceleration(lander.velocity.y < 0.0,left = true,right = false)
+            Acceleration(lander.velocity.y < 0.0,left = true, right = false)
         }
         else if(eT + deriv < 0.0) {
-            Acceleration(lander.velocity.y < 0.0,left = false,right =true)
+            Acceleration(lander.velocity.y < 0.0,left = false, right =true)
         } else {
-            Acceleration(lander.velocity.y < 0.0,left = false,right = false)
+            Acceleration(lander.velocity.y < 0.0,left = false, right = false)
         }
     } else {
         val wA = 7.0
