@@ -68,7 +68,7 @@ class AgentClient(
 
     val agent = WebSocketFactory()
         .createSocket(wsUri)
-        .setPingInterval(15*1000)
+        .setPingInterval(15L*1000L)
         .setPingPayloadGenerator { "PING".toByteArray() }
         .addListener(object : WebSocketAdapter() {
 

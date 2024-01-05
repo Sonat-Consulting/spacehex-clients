@@ -9,7 +9,7 @@ val logger = LoggerFactory.getLogger("Main")
 fun main() {
     logger.info("Start client")
     val ag = AgentClient(
-        wsUri = "ws://localhost:7070/game",
+        wsUri = "ws://localhost:7070/test",
         room = "cwyzc",
         name = "Team s0nat",
         strategy = ::calculateFlight,
