@@ -1,7 +1,18 @@
 Spacehex-clients
 --------
+Create an own branch of this repository for your team.
+Pick a language from the list below and follow the instructions.
 
-## Messages
+#### Specific instructions for each client listed here:
+* [Kotlin](spacehex-kotlin-client)
+* [Python](spacehex-python-client)
+
+
+
+
+# Below here are details for how to create a client from scratch.
+
+## Client Messages
 Messages and when they are passed
 
 ### Join message
