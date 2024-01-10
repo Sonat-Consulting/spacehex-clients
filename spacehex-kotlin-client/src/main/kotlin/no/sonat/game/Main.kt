@@ -10,8 +10,8 @@ fun main() {
     logger.info("Start client")
     val ag = AgentClient(
         wsUri = "ws://localhost:7070/test",
-        room = "cwyzc",
-        name = "Team s0nat",
+        room = "6dnxu",
+        name = "Team kOtlin",
         strategy = ::calculateFlight,
         joinAction = {
             logger.info(it)
