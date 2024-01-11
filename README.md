@@ -6,8 +6,8 @@ Pick a language from the list below and follow the instructions.
 #### Specific instructions for each client listed here:
 * [Kotlin](spacehex-kotlin-client)
 * [Python](spacehex-python-client)
-
-
+* [C#](spacehex-csharp-client)
+* [JavaScript](spacehex-js-client)
 
 
 # Below here are details for how to create a client from scratch.
