@@ -5,8 +5,8 @@ import rel
 import json
 
 url = "ws://localhost:7070/test"
-name = "yolo"  # Team name
-room = "asd123"  # Ignored for test runs, needed for competition
+name = "Team pyth0n"  # Team name
+room = "6dnxu"  # Ignored for test runs, needed for competition
 
 current_env = {}
 
