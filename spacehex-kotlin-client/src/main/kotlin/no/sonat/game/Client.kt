@@ -101,7 +101,6 @@ class AgentClient(
                             websocket.sendText(objectMapper.writeValueAsString(Input(gameId = room,acceleration = acceleration)))
                         }
                         "join" -> {
-                            logger.info("start by visiting url {}", text)
                             joinAction(text)
                         }
                         "error" -> {
