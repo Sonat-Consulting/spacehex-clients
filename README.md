@@ -1,120 +1,35 @@
 Spacehex-clients
 --------
 Create an own branch of this repository for your team.
-Pick a language from the list below and follow the instructions.
+Pick a language from the list below and follow the instructions
+in that repository to start a test flight.
 
 #### Specific instructions for each client listed here:
 * [Kotlin](spacehex-kotlin-client)
 * [Python](spacehex-python-client)
 * [C#](spacehex-csharp-client)
 * [JavaScript](spacehex-js-client)
+* [Go](spacehex-go-client)
 
+### General instructions
+The game uses a 2D playing field of size 1024 x 768 Game Units.
+It is structured like this (the segments, start point and goal can vary)
 
-# Below here are details for how to create a client from scratch.
+![Image](env-image.png)
 
-## Client Messages
-Messages and when they are passed
+### Gravity
+Gravity is a force from top to bottom. Your craft conveniently has mass 1.
 
-### Join message
-Attaches the player name to the Websocket session and game.
-```gameId``` is not needed for test games,.
-Should be sent on Websocket session connect.
-```
-{
-  "type": "join",
-  "name": "Team s0nat",
-  "gameId": "cwyzc"
-}
-```
+### Goal
+To reach the goal point (the red point), you need to be within 5.0 game units, 
+at a speed below 2.5 GU/s.
 
-### State message
-Current state of the lander. Received every 100ms when game is running.
-Acceleration is the acceleration applied last frame.
-```
-{
-  "lander": {
-    "position": {
-      "x": 69.95,
-      "y": 273.5499999999998
-    },
-    "velocity": {
-      "x": -0.5,
-      "y": -9.5
-    },
-    "acceleration": {
-      "x": -5.0,
-      "y": 5.0
-    },
-    "status": "FLYING",
-    "finishTime": null
-  },
-  "type": "state"
-}
-```
+### Segment collision 
+The line segments show in green should not be crossed. If two subsequent positions
+of your craft passes through a line segment, your craft has crashed.
 
+### Max flight time
+The maximum can vary based on map, but 3 minutes.
 
-### Input message
-Input for a lander.
-Can be sent any time, but if sent several times withing the 100ms window it will override
-previous values.
-```
-{
-  "gameId": "cwyzc",
-  "acceleration": {
-    "up": false,
-    "left": false,
-    "right": false
-  },
-  "type": "input"
-}
-```
-
-
-### Environment message
-This message is sent at the start of every game and stays constants throughout the game.
-It is meant to be stored and referenced.
-
-Contains:
-* 2D line segments that must not be crossed. Crossing these means crashing.
-* The goal that must be reached in space, must be withing 5 game units from the position, and at less then 2.5 game units/s velocity.
-* Constants in the game (gravity, lander acceleration, update delta)
-```
-{
-  "segments": [
-    {
-      "start": {
-        "x": -1024.0,
-        "y": -120.0
-      },
-      "end": {
-        "x": -512.0,
-        "y": -135.0
-      }
-    },
-    {
-      "start": {
-        "x": -512.0,
-        "y": -135.0
-      },
-      "end": {
-        "x": -256.0,
-        "y": -120.0
-      }
-    },
-    ...
-  ],
-  "goal": {
-    "x": -35.0,
-    "y": -335.0
-  },
-  "constants": {
-    "timeDeltaSeconds": 0.1,
-    "gravity": 10.0,
-    "landerAccelerationLeft": 5.0,
-    "landerAccelerationRight": 5.0,
-    "landerAccelerationUp": 15.0
-  },
-  "type": "env"
-}
-
-```
+### Out of bounds
+If you go out of the visible area nothing will happen.
