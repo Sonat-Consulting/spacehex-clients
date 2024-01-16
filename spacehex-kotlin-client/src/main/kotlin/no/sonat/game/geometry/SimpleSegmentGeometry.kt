@@ -58,12 +58,19 @@ class LineSegment2D(val start : Vec2D, val end : Vec2D) {
         val t = num/denom;
         val pos = line.start + line.direction()*t
 
-        val maxX = max(line.start.x,line.end.x) + EPSILON
-        val minX = min(line.start.x,line.end.x) - EPSILON
-        val maxY = max(line.start.y,line.end.y) + EPSILON
-        val minY = min(line.start.y,line.end.y) - EPSILON
+        val l1maxX = max(line.start.x,line.end.x) + EPSILON
+        val l1minX = min(line.start.x,line.end.x) - EPSILON
+        val l1maxY = max(line.start.y,line.end.y) + EPSILON
+        val l1minY = min(line.start.y,line.end.y) - EPSILON
 
-        if(pos.x in minX .. maxX && pos.y in minY .. maxY) {
+        val l2maxX = max(this.start.x,this.end.x) + EPSILON
+        val l2minX = min(this.start.x,this.end.x) - EPSILON
+        val l2maxY = max(this.start.y,this.end.y) + EPSILON
+        val l2minY = min(this.start.y,this.end.y) - EPSILON
+
+        if(
+            pos.x in l1minX .. l1maxX && pos.y in l1minY .. l1maxY &&
+            pos.x in l2minX .. l2maxX && pos.y in l2minY .. l2maxY ) {
             return pos
         }
         return null

@@ -48,5 +48,13 @@ class TestGeometry {
         assertTrue { ( pt!!- Vec2D(1.0,1.0)).length() < 0.01 }
     }
 
+    @Test
+    fun testSegmentNoIntersectCase() {
+        val segmA = LineSegment2D(start=Vec2D(x=-341.0, y=-223.0), end=Vec2D(x=-292.0, y=-194.0))
+        val segmB = LineSegment2D(start=Vec2D(x=445.8586189801885, y=246.7999999999996), end=Vec2D(x=447.3242977416373, y=243.5499999999996))
+
+        val pt = segmA.intersects(segmB)
+        assertTrue { pt == null }
+    }
 
 }
