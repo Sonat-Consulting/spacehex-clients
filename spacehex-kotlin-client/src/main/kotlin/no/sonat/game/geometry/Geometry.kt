@@ -4,20 +4,12 @@ import kotlin.*
 import kotlin.math.*
 
 /**
- *
+ * Segments
  */
 data class LineSegment2D(val start : Vec2D, val end : Vec2D) {
 
     fun vector() : Vec2D {
         return end - start;
-    }
-
-    fun horizontal() : Boolean {
-        return direction().y == 0.0
-    }
-
-    fun vertical() : Boolean {
-        return direction().x == 0.0
     }
 
     fun length() : Double {
@@ -75,59 +67,46 @@ data class Vec2D(
     }
 
     operator fun unaryPlus() : Vec2D {
-        return Vec2D(x,y);
+        return Vec2D(x,y)
     }
 
     operator fun unaryMinus() : Vec2D {
-        return Vec2D(-x,-y);
+        return Vec2D(-x,-y)
     }
 
     operator fun plus(v: Vec2D) : Vec2D {
-        return Vec2D(v.x+x,v.y+y);
+        return Vec2D(v.x+x,v.y+y)
     }
 
     operator fun minus(v: Vec2D) : Vec2D {
-        return Vec2D(x-v.x,y-v.y);
+        return Vec2D(x-v.x,y-v.y)
     }
 
     operator fun times(vec : Vec2D) : Vec2D {
-        return Vec2D(vec.x*x,vec.y*y);
+        return Vec2D(vec.x*x,vec.y*y)
     }
 
     operator fun times(f:Double): Vec2D {
-        return Vec2D(x*f,y*f);
+        return Vec2D(x*f,y*f)
     }
 
     operator fun div(f:Double) : Vec2D {
-        return Vec2D(x/f,y/f);
+        return Vec2D(x/f,y/f)
     }
 
     fun flip() : Vec2D {
-        return Vec2D(y,x);
+        return Vec2D(y,x)
     }
 
     fun createOrthogonalVector() : Vec2D {
-        return Vec2D(-x,y).flip();
-    }
-
-    fun signX() : Double {
-        if(this.x > 0) return 1.0;
-        if(this.x < 0) return 1.0;
-        return 0.0;
-    }
-
-    fun signY() : Double {
-        if(this.y > 0) return 1.0;
-        if(this.y < 0) return 1.0;
-        return 0.0;
+        return Vec2D(-x,y).flip()
     }
 
     fun normalize() : Vec2D {
-        if(this == ZERO) {
-            return ZERO;
-        }
-        else {
-            return this.div(length());
+        return if(this == ZERO) {
+            ZERO
+        } else {
+            this.div(length());
         }
     }
 
