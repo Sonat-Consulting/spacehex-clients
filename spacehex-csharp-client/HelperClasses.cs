@@ -9,25 +9,19 @@ class LineSegment2D
 
   [JsonProperty("end")]
   public required Vec2D End { get; set; }
-  [JsonProperty("isHorizontal")]
-  public required bool IsHorizontal { get; set; }
-  [JsonProperty("direction")]
-  public required Vec2D Direction { get; set; }
-  [JsonProperty("isVertical")]
-  public required bool IsVertical { get; set; }
 
   public Vec2D Vector() => End - Start;
 
   public double Length() => Vector().Length();
 
-  public Vec2D Normalized() => Vector().Normalized();
+  public Vec2D Direction() => Vector().Normalized();
 
   public Vec2D? Intersects(LineSegment2D line)
   {
     var b = Start;
     var a = line.Start;
-    var w = Direction;
-    var v = line.Direction;
+    var w = Direction();
+    var v = line.Direction();
 
     var num = a.Y * w.X - a.X * w.Y - b.Y * w.X + b.X * w.Y;
     var denom = v.X * w.Y - v.Y * w.X;
@@ -35,7 +29,7 @@ class LineSegment2D
     if (denom == 0.0) return null;
 
     var t = num / denom;
-    var pos = line.Start + line.Direction * t;
+    var pos = line.Start + v * t;
 
     var EPSILON = 0.0000001;
     var l1maxX = Math.Max(line.Start.X, line.End.X) + EPSILON;
@@ -49,10 +43,15 @@ class LineSegment2D
     var l2minY = Math.Min(Start.Y, End.Y) - EPSILON;
 
     if (
-      pos.X >= l1minX && pos.X <= l1maxX
-      && pos.Y >= l1minY && pos.Y <= l1maxY
-      && pos.X >= l2minX && pos.X <= l2maxX
-      && pos.Y >= l2minY && pos.Y <= l2maxY) return pos;
+      pos.X > l1minX && pos.X < l1maxX &&
+      pos.Y > l1minY && pos.Y < l1maxY &&
+      pos.X > l2minX && pos.X < l2maxX &&
+      pos.Y > l2minY && pos.Y < l2maxY
+    )
+    {
+      return pos;
+    }
+
     return null;
   }
 }

@@ -10,32 +10,25 @@ class Program
 
     static Environment? ENV;
 
-    static Action Strategy(Environment? env, State state)
+    static Acceleration Strategy(Environment? env, Lander lander)
     {
-        if (state.Lander.Position.Y < 200)
+        if (lander.Position.Y < 200)
         {
             return new()
             {
-                GameId = ROOM,
-                Acceleration = new()
-                {
-                    Up = true,
-                    Left = false,
-                    Right = false,
-                }
+                Up = true,
+                Left = false,
+                Right = false,
             };
+
         }
         else
         {
             return new()
             {
-                GameId = ROOM,
-                Acceleration = new()
-                {
-                    Up = false,
-                    Left = false,
-                    Right = false,
-                }
+                Up = false,
+                Left = false,
+                Right = false,
             };
         }
     }
@@ -80,7 +73,7 @@ class Program
             else if (message.type == "state")
             {
                 State state = JsonConvert.DeserializeObject<State>(data.ToString())!;
-                Action action = Strategy(ENV, state);
+                Action action = new() { GameId = ROOM, Acceleration = Strategy(ENV, state.Lander), Type = "input" };
                 string inputMessage = JsonConvert.SerializeObject(action);
                 Console.WriteLine(inputMessage);
                 client.Send(inputMessage);
