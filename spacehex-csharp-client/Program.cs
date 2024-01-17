@@ -40,13 +40,14 @@ class Program
         }
     }
 
-    // ------ INFRA AND MESSAGING CODE BELOW HERE, NO NEED TO CHANGE ------
-
     static void Main(string[] args)
     {
-        var exitEvent = new ManualResetEvent(false);
+        var url = new Uri("ws://51.120.245.215:7070/test");
+        // var url = new Uri("ws://51.120.245.215:7070/play");
 
-        var url = new Uri("ws://localhost:7070/test");
+        // ------ INFRA AND MESSAGING CODE BELOW HERE, NO NEED TO CHANGE------
+
+        var exitEvent = new ManualResetEvent(false);
 
         using var client = new WebsocketClient(url);
         client.ReconnectionHappened.Subscribe(info =>
