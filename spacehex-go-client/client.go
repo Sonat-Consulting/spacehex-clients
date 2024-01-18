@@ -125,6 +125,9 @@ func (a *AgentClient) readMessages(c *websocket.Conn) {
 }
 
 func (a *AgentClient) handleMessage(c *websocket.Conn, message []byte) {
+	if "PONG" == string(message) {
+		return
+	}
 	var msg map[string]json.RawMessage
 	err := json.Unmarshal(message, &msg)
 	if err != nil {
