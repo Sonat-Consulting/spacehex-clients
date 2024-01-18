@@ -4,14 +4,16 @@ import time
 import rel
 import json
 
-url = "ws://localhost:7070/test"
+#url = "ws://51.120.245.215:7070/play"
+url = "ws://51.120.245.215:7070/test"
+
 name = "Team pyth0n"  # Team name
-room = "6dnxu"  # Ignored for test runs, needed for competition
+room = "y5q96"  # Ignored for test runs, needed for competition
 
 current_env = {}
 
 
-def strategy(env, lander):
+def calculate_acceleration(env, lander):
     if lander["position"]["y"] < 200.0:
         return {
             "gameId": room,
@@ -38,13 +40,15 @@ def strategy(env, lander):
 
 def on_message(ws, message):
     print(message)
+    if message == "PONG":
+        return
     message = json.loads(message)
     type = message["type"]
     if type == "env":
         global current_env
         current_env = message
     elif type == "state":
-        action = strategy(current_env, message["lander"])
+        action = calculate_acceleration(current_env, message["lander"])
         input_message = json.dumps(action)
         print(input_message)
         ws.send(input_message)
