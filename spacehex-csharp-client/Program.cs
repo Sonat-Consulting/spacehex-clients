@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Websocket.Client;
+using ThreadingTimer = System.Threading.Timer;
 
 namespace spacehex_csharp_client;
 
 class Program
 {
-    static readonly string NAME = "yolo"; // Team name
-    static readonly string ROOM = "asd123"; // Ignored for test runs, needed for competition
+    static readonly string NAME = "Team C#"; // Team name
+    static readonly string ROOM = "692pa"; // Ignored for test runs, needed for competition
 
     static Environment? ENV;
 
@@ -65,32 +66,42 @@ class Program
 
         client.MessageReceived.Subscribe(data =>
         {
+            if(data.ToString() == "PONG")
+            {
+                Console.WriteLine("Got pong");
+            } else
+            {
             dynamic message = JsonConvert.DeserializeObject(data.ToString())!;
-            if (message.type == "env")
-            {
-                ENV = JsonConvert.DeserializeObject<Environment>(data.ToString())!;
-            }
-            else if (message.type == "state")
-            {
-                State state = JsonConvert.DeserializeObject<State>(data.ToString())!;
-                Action action = new() { GameId = ROOM, Acceleration = Strategy(ENV, state.Lander), Type = "input" };
-                string inputMessage = JsonConvert.SerializeObject(action);
-                Console.WriteLine(inputMessage);
-                client.Send(inputMessage);
-            }
-            else if (message.type == "join")
-            {
-                Console.WriteLine(data);
-            }
-            else
-            {
-                Console.WriteLine("Got unexpected type: " + message.type);
+                if (message.type == "env")
+                {
+                    ENV = JsonConvert.DeserializeObject<Environment>(data.ToString())!;
+                }
+                else if (message.type == "state")
+                {
+                    State state = JsonConvert.DeserializeObject<State>(data.ToString())!;
+                    Action action = new() { GameId = ROOM, Acceleration = Strategy(ENV, state.Lander), Type = "input" };
+                    string inputMessage = JsonConvert.SerializeObject(action);
+                    Console.WriteLine(inputMessage);
+                    client.Send(inputMessage);
+                }
+                else if (message.type == "join")
+                {
+                    Console.WriteLine(data);
+                }
+                else
+                {
+                    Console.WriteLine("Got unexpected type: " + message.type);
+                }
             }
 
         });
 
-        client.Start();
+        var timer = new ThreadingTimer(_ => {
+            Console.WriteLine("Ping");
+            client.Send("PING");
+        }, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
 
+        client.Start();
         exitEvent.WaitOne();
     }
 }
