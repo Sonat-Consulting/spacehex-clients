@@ -13,7 +13,8 @@ func main() {
 	logger.Println("Start client")
 	agentClient := AgentClient{
 		WsURI:      "ws://51.120.245.215:7070/test",
-		Room:       "6dnxu",
+		//WsURI:      "ws://51.120.245.215:7070/play",
+		Room:       "692pa",
 		Name:       "Team Go",
 		Strategy:   calculateFlight,
 		JoinAction: func(msg string) { logger.Println(msg) },
