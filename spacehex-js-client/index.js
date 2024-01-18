@@ -4,8 +4,8 @@ import { LineSegment2D, Vec2D } from './helper.js';
 const url = 'ws://51.120.245.215:7070/test';
 //const url = 'ws://51.120.245.215:7070/play'; 
 
-const name = 'yolo'; // Team name
-const room = 'asd123'; // Ignored for test runs, needed for competition
+const name = 'Team JS'; // Team name
+const room = '692pa'; // Ignored for test runs, needed for competition
 
 let currentEnv = {};
 
@@ -54,18 +54,26 @@ ws.on('open', function open() {
 });
 
 ws.on('message', function message(data) {
-  const message = JSON.parse(data);
-  const type = message.type;
-  if (type === 'env') {
-    currentEnv = message;
-  } else if (type === 'state') {
-    const action = { gameId: room, acceleration: strategy(currentEnv, message.lander), type: 'input' };
-    const inputMessage = JSON.stringify(action);
-    console.log(inputMessage);
-    ws.send(inputMessage);
-  } else if (type === 'join') {
-    console.log(message);
-  } else {
-    console.log('Got unexpected type: ' + type);
+  try {
+    if(data === "PONG") {
+      console.log("Got PONG")
+    } else {
+      const message = JSON.parse(data);
+      const type = message.type;
+      if (type === 'env') {
+        currentEnv = message;
+      } else if (type === 'state') {
+        const action = {gameId: room, acceleration: strategy(currentEnv, message.lander), type: 'input'};
+        const inputMessage = JSON.stringify(action);
+        console.log(inputMessage);
+        ws.send(inputMessage);
+      } else if (type === 'join') {
+        console.log(message);
+      } else {
+        console.log('Got unexpected type: ' + type);
+      }
+    }
+  } catch (e) {
+    console.log("failed with error: "+ e + "for data" + data)
   }
 });
