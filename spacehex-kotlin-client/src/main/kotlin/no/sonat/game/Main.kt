@@ -12,14 +12,14 @@ fun main() {
         //wsUri = "ws://51.120.245.215:7070/play",
         room = "j1ycg", //Not in use for test runs
         name = "Team kOtlin",
-        strategy = ::calculateAccelerationToApply,
+        strategy = ::calculateAcceleration,
         joinAction = {
             logger.info(it)
         }
     )
 }
 
-fun calculateAccelerationToApply(env: Environment, lander : Lander) : Acceleration {
+fun calculateAcceleration(env: Environment, lander : Lander) : Acceleration {
     return if(lander.position.y < 200) {
         Acceleration(up = true, left = false, right = false)
     } else {
