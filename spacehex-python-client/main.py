@@ -1,6 +1,5 @@
 import websocket
-import _thread
-import time
+import threading
 import rel
 import json
 
@@ -85,7 +84,16 @@ if __name__ == "__main__":
                                 on_error=on_error,
                                 on_close=on_close)
 
+    def do_ping():
+        print("Sending ping")
+        ws.send("PING")
+        t = threading.Timer(15,do_ping)
+        t.daemon = True
+        t.start()
+
     ws.run_forever(dispatcher=rel, ping_interval=15, ping_payload="PING")
+
+    do_ping()
 
     rel.signal(2, rel.abort)  # Keyboard Interrupt
     rel.dispatch()
