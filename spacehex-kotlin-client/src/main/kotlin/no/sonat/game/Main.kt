@@ -13,10 +13,13 @@ fun main() {
         room = "j1ycg", //Not in use for test runs
         name = "Team kOtlin",
         strategy = ::calculateAcceleration,
-        joinAction = {
-            logger.info(it)
-        }
+        startRound = ::startRound
     )
+}
+
+fun startRound() {
+    logger.info("New round")
+    //Clean up state from previous round
 }
 
 fun calculateAcceleration(env: Environment, lander : Lander) : Acceleration {

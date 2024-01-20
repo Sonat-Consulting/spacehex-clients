@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.neovisionaries.ws.client.*
 import org.slf4j.LoggerFactory
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
 enum class LanderStatus { FLYING, COMPLETED, CRASHED, DID_NOT_FINISH }
@@ -42,11 +43,11 @@ data class Constants(
     val landerAccelerationUp : Double = 15.0,
 )
 
-data class State(val lander: Lander) {
+data class State(val lander: Lander, val round : Int) {
     val type: String = "state"
 }
 
-data class Environment(val segments: List<LineSegment2D>, val goal : Vec2D, val constants: Constants ) {
+data class Environment(val segments: List<LineSegment2D>, val goal : Vec2D, val constants: Constants,val round : Int) {
     val type: String = "env"
 }
 
@@ -57,9 +58,11 @@ class AgentClient(
     val room : String,
     val name : String,
     val strategy : (environment : Environment, state : Lander) -> Acceleration,
-    val joinAction : (String) -> Unit = {}) {
+    val startRound : () -> Unit) {
 
     private val logger = LoggerFactory.getLogger("Agent")
+    val round = AtomicInteger(-1)
+
     val objectMapper = ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .registerKotlinModule()
@@ -92,16 +95,25 @@ class AgentClient(
                     when (type) {
                         "env" -> {
                             val environment = objectMapper.readValue(text, Environment::class.java)
+                            val oldRound = round.get()
+                            round.set(environment.round)
                             currentEnvironment.set(environment)
+                            if(oldRound < environment.round) {
+                                 startRound()
+                            }
                         }
                         "state" -> {
                             val state = objectMapper.readValue(text, State::class.java)
-                            val acceleration = strategy(currentEnvironment.get(),state.lander)
-                            logger.info("acceleration: $acceleration")
-                            websocket.sendText(objectMapper.writeValueAsString(Input(gameId = room,acceleration = acceleration)))
+                            if(state.round >= round.get()) {
+                                val acceleration = strategy(currentEnvironment.get(),state.lander)
+                                logger.info("acceleration: $acceleration")
+                                websocket.sendText(objectMapper.writeValueAsString(Input(gameId = room,acceleration = acceleration)))
+                            } else {
+                                logger.info("Got old round message {}",state)
+                            }
                         }
                         "join" -> {
-                            joinAction(text)
+
                         }
                         "error" -> {
                             logger.info("Game error {}", response)
