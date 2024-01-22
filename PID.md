@@ -23,8 +23,12 @@ Et mulig mål er endring i proportional fra forrige tick.
 ```derivative = (proportional - previousProportional)/timeDelta```
 
 ### Oversettelse fra kontroller output til aksjon
-Kontroller vil gi ut en verdi. Vektene her er konstanter som er valgt tilpasset problemet.
-``` output = proportional*proportionalVekt + derivative*derivativeVekt ```
+Kontroller vil gi ut en verdi. Vektene her er konstanter som tilpasses problemet.
+``` 
+proportionalVekt = 1.0
+derivativeVekt = 3.0
+output = proportional*proportionalVekt + derivative*derivativeVekt 
+```
 I vårt tilfelle så må vi da lage en akselrasjons aksjon som prøver oppnå dette målet.
 
 #### Bestemme vekter:
