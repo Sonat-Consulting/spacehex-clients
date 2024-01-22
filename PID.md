@@ -31,7 +31,7 @@ I vårt tilfelle så må vi da lage en akselrasjons aksjon som prøver oppnå de
 Gjør det eksperimentelt. Hva som er bra kommer ann på andre valg. Som hvor nær lanskapet stien som er valgt er, og hvor høy maksimal hastighet som er akseptabel er o.s.v
 
 #### Hva PID kontroller ikke hjelper oss med
-PID regulator kjører oss fra en positjon til en annen posisjon. Den sier ikke noe om når den har oppnådd dette. Den tar ikke hensyn til om den har kollidert med noe på veien. Å gjøre ting uten overskyting kan gå sakte.
+PID kontroller kjører oss fra en positjon til en annen posisjon. Den sier ikke noe om når den har oppnådd dette. Den tar ikke hensyn til om den har kollidert med noe på veien. Å gjøre ting uten overskyting kan gå sakte.
 
 [PID without a PHD](https://www.wescottdesign.com/articles/pid/pidWithoutAPhd.pdf)
 
