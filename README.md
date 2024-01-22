@@ -34,4 +34,5 @@ of your craft passes through a line segment, your craft has crashed.
 5 minutes
 
 ### Out of bounds
-If you go out of the visible area nothing will happen.
+If you go out of the visible area nothing will happen, but there is no point.
+This restricts your search space, so use it wisely.
