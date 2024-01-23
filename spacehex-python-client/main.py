@@ -3,8 +3,8 @@ import threading
 import rel
 import json
 
-#url = "ws://51.120.245.215:7070/play"
-url = "ws://51.120.245.215:7070/test"
+#url = "ws://4.235.120.113:7070/play"
+url = "ws://4.235.120.113:7070/test"
 
 name = "Team pyth0n"  # Team name
 room = "y5q96"  # Ignored for test runs, needed for competition
