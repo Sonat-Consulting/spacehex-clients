@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { LineSegment2D, Vec2D } from './helper.js';
+import { LineSegment2D, Vec2D } from './simplegeometry.js';
 
 const url = 'ws://51.120.245.215:7070/test';
 //const url = 'ws://51.120.245.215:7070/play'; 
