@@ -4,15 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.neovisionaries.ws.client.*
+import no.sonat.game.geometry.LineSegment2D
+import no.sonat.game.geometry.Vec2D
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicReference
 
 enum class LanderStatus { FLYING, COMPLETED, CRASHED, DID_NOT_FINISH }
-
-data class Vec2D(
-    val x:Double,
-    val y:Double)
-
 
 data class Lander(
     val position : Vec2D,
@@ -49,8 +46,6 @@ data class State(val lander: Lander) {
 data class Environment(val segments: List<LineSegment2D>, val goal : Vec2D, val constants: Constants ) {
     val type: String = "env"
 }
-
-data class LineSegment2D(val start : Vec2D, val end : Vec2D)
 
 class AgentClient(
     val wsUri : String,
