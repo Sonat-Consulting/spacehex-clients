@@ -1,8 +1,8 @@
 import WebSocket from 'ws';
 import { LineSegment2D, Vec2D } from './simplegeometry.js';
 
-const url = 'ws://4.235.120.113:7070/test';
-//const url = 'ws://4.235.120.113:7070/play'; 
+const url = 'ws://spacehex.norwayeast.cloudapp.azure.com:7070/test';
+//const url = 'ws://spacehex.norwayeast.cloudapp.azure.com:7070/play'; 
 
 const name = 'Team JS'; // Team name
 const room = '692pa'; // Ignored for test runs, needed for competition

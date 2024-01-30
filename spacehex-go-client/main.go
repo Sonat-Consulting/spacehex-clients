@@ -12,8 +12,8 @@ var logger = log.New(os.Stdout, "Main", log.LstdFlags)
 func main() {
 	logger.Println("Start client")
 	agentClient := AgentClient{
-		WsURI:      "ws://4.235.120.113:7070/test",
-		//WsURI:      "ws://4.235.120.113:7070/play",
+		WsURI:      "ws://spacehex.norwayeast.cloudapp.azure.com:7070/test",
+		//WsURI:      "ws://spacehex.norwayeast.cloudapp.azure.com:7070/play",
 		Room:       "692pa",
 		Name:       "Team Go",
 		Strategy:   calculateFlight,

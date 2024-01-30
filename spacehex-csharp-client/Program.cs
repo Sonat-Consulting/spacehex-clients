@@ -36,8 +36,8 @@ class Program
 
     static void Main(string[] args)
     {
-        var url = new Uri("ws://4.235.120.113:7070/test");
-        // var url = new Uri("ws://4.235.120.113:7070/play");
+        var url = new Uri("ws://spacehex.norwayeast.cloudapp.azure.com:7070/test");
+        // var url = new Uri("ws://spacehex.norwayeast.cloudapp.azure.com:7070/play");
 
         // ------ INFRA AND MESSAGING CODE BELOW HERE, NO NEED TO CHANGE------
 
