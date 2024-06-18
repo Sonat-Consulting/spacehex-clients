@@ -11,7 +11,7 @@
   "author": "Andreas Garvik",
   "license": "ISC",
   "dependencies": {
-    "ws": "^8.16.0",
+    "ws": "^8.17.1",
     "mocha": "^10.2.0"
   }
 }
