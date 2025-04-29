@@ -67,8 +67,8 @@ It is meant to be stored and referenced.
 
 Contains:
 * 2D line segments that must not be crossed. Crossing these means crashing.
-* The goal that must be reached in space, must be withing 5 game units from the position, and at less then 2.5 game units/s velocity.
-* Constants in the game (gravity, lander acceleration, update delta)
+* The goal that must be reached in space, must be within 5 game units from the position, and at less then 2.5 game units/s velocity.
+* Constants in the game (gravity, lander acceleration, update delta). Accelerations are in gameUnits/s^2.
 ```
 {
   "segments": [

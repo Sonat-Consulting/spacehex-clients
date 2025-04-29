@@ -26,7 +26,9 @@ at a speed below 2.5 GU/s.
 
 ### Segment collision 
 The line segments shown in green should not be crossed. If two subsequent positions
-of your craft passes through a line segment, your craft has crashed.
+of your craft passes through a line segment, your craft has crashed. 
+
+The green lines that fade into the background are only for visual effect.
 
 ![Image](collision.png)
 
