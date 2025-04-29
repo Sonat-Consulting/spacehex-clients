@@ -220,7 +220,7 @@ class Vec2D(
 
     /**
      * Equals can only be used for exact comparisons of binary double values.
-     * In other words. Do not exepect (A * B + C - C)/B to be equal to A.
+     * In other words. Do not expect (A * B + C - C)/B to be equal to A.
      */
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
