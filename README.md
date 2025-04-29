@@ -1,6 +1,6 @@
 Spacehex-clients
 --------
-Create an own branch of this repository for your team.
+Create a branch of this repository for your team.
 Pick a language from the list below and follow the instructions
 in that repository to start a test flight.
 
