@@ -1,8 +1,10 @@
 Spacehex-clients
 --------
-Create a branch of this repository for your team.
-Pick a language from the list below and follow the instructions
-in that repository to start a test flight.
+
+### Getting started
+* Clone this repository.
+* Pick a language from the list below.
+* Follow the instructions in the readme in that directory to start a test flight.
 
 #### Specific instructions for each client listed here:
 * [Kotlin](spacehex-kotlin-client)
@@ -38,3 +40,102 @@ The green lines that fade into the background are only for visual effect.
 ### Out of bounds
 If you go out of the visible area nothing will happen, but there is no point.
 This restricts your search space, so use it wisely.
+
+### Where to code (example in JS)
+
+```javascript
+function strategy(env, lander) {
+    return {
+        up: true,
+        left: false,
+        right: false
+    }
+}
+```
+This function should be implemented to control the craft. Each game 
+tick is 100 ms, and this function will be called at that rate.
+So to ensure you get time to receive, calculate and send the input 
+before the next tick, calculation should ideally be below 25 ms.
+
+If you are too late, the craft will keep using the last input it received.
+
+Use globals to keep track of previous states.
+
+The parameter ```env``` contains the environment. This data is static
+and the js object is structured like this:
+```json
+{
+  "segments": [
+    {
+      "start": {
+        "x": -1024.0,
+        "y": -120.0
+      },
+      "end": {
+        "x": -512.0,
+        "y": -135.0
+      }
+    },
+    {
+      "start": {
+        "x": -512.0,
+        "y": -135.0
+      },
+      "end": {
+        "x": -256.0,
+        "y": -120.0
+      }
+    }
+  ],
+  "goal": {
+    "x": -35.0,
+    "y": -335.0
+  },
+  "constants": {
+    "timeDeltaSeconds": 0.1,
+    "gravity": 10.0,
+    "landerAccelerationLeft": 5.0,
+    "landerAccelerationRight": 5.0,
+    "landerAccelerationUp": 15.0
+  }
+}
+```
+
+The parameter ```lander``` contains the craft state, structured like this:
+```json
+{
+  "lander": {
+    "position": {
+      "x": 69.95,
+      "y": 273.5499999999998
+    },
+    "velocity": {
+      "x": -0.5,
+      "y": -9.5
+    },
+    "acceleration": {
+      "x": -5.0,
+      "y": 5.0
+    }
+  }
+}
+```
+
+This example fires the engine when the craft y position is below 200.
+```javascript
+function strategy(env, lander) {
+    if (lander.position.y < 200) {
+        return {
+            up: true,
+            left: false,
+            right: false
+        }
+    } else {
+        return {
+            up: false,
+            left: false,
+            right: false
+        }
+    }
+}
+```
