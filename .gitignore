@@ -44,3 +44,4 @@ build/
 
 */.venv/*
 /spacehex-python-client/__pycache__/
+/spacehex-go-client/spacehex-client
