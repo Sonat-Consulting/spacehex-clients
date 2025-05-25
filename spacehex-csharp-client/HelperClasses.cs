@@ -81,3 +81,11 @@ class Lander
   [JsonProperty("finishTime")]
   public required double? FinishTime { get; set; }
 }
+
+class Debug
+{
+  [JsonProperty("segments")]
+  public required LineSegment2D[] Segments { get; set; }
+  [JsonProperty("type")]
+  public string Type { get; set; } = "debug";
+}

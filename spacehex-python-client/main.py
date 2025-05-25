@@ -3,6 +3,8 @@ import threading
 import rel
 import json
 
+from simplegeometry import Vec2D, LineSegment2D
+
 #url = "ws://spacehex.norwayeast.cloudapp.azure.com:7070/play"
 url = "ws://spacehex.norwayeast.cloudapp.azure.com:7070/test"
 
@@ -14,6 +16,11 @@ current_env = {}
 
 def calculate_acceleration(env, lander):
     if lander["position"]["y"] < 200.0:
+        x = lander["position"]["x"]
+        y = lander["position"]["y"]
+        gX = env["goal"]["x"]
+        gY = env["goal"]["y"]
+        send_debug([{"start":{"x":x,"y":y},"end" :{"x":gX,"y":gY}}])
         return {
             "gameId": room,
             "acceleration": {
@@ -74,6 +81,16 @@ def on_open(ws):
     }
     join_message = json.dumps(join)
     ws.send(join_message)
+
+
+def send_debug(segments):
+    if url.endswith("test"):
+        debug = {
+        "segments": segments,
+        "type": "debug"
+        }
+        debug_message = json.dumps(debug)
+        ws.send(debug_message)
 
 
 if __name__ == "__main__":

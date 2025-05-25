@@ -69,6 +69,11 @@ type LineSegment2D struct {
 	End   Vec2D `json:"end"`
 }
 
+type DebugInput struct {
+	Segments []LineSegment2D `json:"segments"`
+	Type     string          `json:"type"`
+}
+
 type AgentClient struct {
 	WsURI      string
 	Room       string
@@ -76,6 +81,8 @@ type AgentClient struct {
 	Strategy   func(Environment, Lander) Acceleration
 	JoinAction func(string)
 	mu         sync.Mutex
+	Test       bool
+	Conn       *websocket.Conn
 }
 
 var environment Environment
@@ -86,6 +93,7 @@ func (a *AgentClient) Run() {
 		log.Fatal("dial:", err)
 	}
 	defer c.Close()
+	a.Conn = c
 
 	go func() {
 		for {
@@ -210,5 +218,23 @@ func (a *AgentClient) sendInput(c *websocket.Conn, acceleration Acceleration) {
 	if err != nil {
 		log.Println("write:", err)
 		return
+	}
+}
+
+func (a *AgentClient) sendDebug(segments []LineSegment2D) {
+	if a.Test {
+		logger.Println("Send debug")
+		input := DebugInput{
+			Segments: segments,
+			Type:     "debug",
+		}
+
+		if a.Conn != nil {
+			err := a.Conn.WriteJSON(input)
+			if err != nil {
+				log.Println("write:", err)
+				return
+			}
+		}
 	}
 }

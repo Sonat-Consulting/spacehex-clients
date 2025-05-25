@@ -8,6 +8,8 @@ class Program
 {
     static readonly string NAME = "Team C#"; // Team name
     static readonly string ROOM = "692pa"; // Ignored for test runs, needed for competition
+    static readonly Uri url = new Uri("ws://spacehex.norwayeast.cloudapp.azure.com:7070/test");
+    //static readonly Uri url = new Uri("ws://spacehex.norwayeast.cloudapp.azure.com:7070/play");
 
     static Environment? ENV;
 
@@ -15,6 +17,9 @@ class Program
     {
         if (lander.Position.Y < 200)
         {
+            if(env != null) {
+                sendDebug([new LineSegment2D(lander.Position, env.Goal)]);
+            }
             return new()
             {
                 Up = true,
@@ -34,16 +39,17 @@ class Program
         }
     }
 
+
+
+    static WebsocketClient? client;
     static void Main(string[] args)
     {
-        var url = new Uri("ws://spacehex.norwayeast.cloudapp.azure.com:7070/test");
-        // var url = new Uri("ws://spacehex.norwayeast.cloudapp.azure.com:7070/play");
 
         // ------ INFRA AND MESSAGING CODE BELOW HERE, NO NEED TO CHANGE------
 
         var exitEvent = new ManualResetEvent(false);
 
-        using var client = new WebsocketClient(url);
+        client = new WebsocketClient(url);
         client.ReconnectionHappened.Subscribe(info =>
             {
                 if (info.Type == ReconnectionType.Initial)
@@ -103,5 +109,18 @@ class Program
 
         client.Start();
         exitEvent.WaitOne();
+    }
+
+    static void sendDebug(LineSegment2D[] Segments) {
+        if(url.ToString().EndsWith("test")) {
+            Debug debug = new() {
+                Segments = Segments
+            };
+            string inputMessage = JsonConvert.SerializeObject(debug);
+            Console.WriteLine(inputMessage);
+            if(client != null) {
+                client.Send(inputMessage);
+            }
+        }
     }
 }

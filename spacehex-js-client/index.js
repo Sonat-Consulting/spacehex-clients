@@ -11,6 +11,9 @@ let currentEnv = {};
 
 function strategy(env, lander) {
   if(lander.position.y < 200) {
+    sendDebug(
+        [new LineSegment2D(lander.position,env.goal)]
+    )
     return {
       up: true,
       left: false,
@@ -30,6 +33,15 @@ function strategy(env, lander) {
 
 let interval;
 const ws = new WebSocket(url);
+
+function sendDebug(segments) {
+  if(url.endsWith("test")) {
+    ws.send(JSON.stringify({
+      type: "debug",
+      segments: segments
+    }))
+  }
+}
 
 ws.on('error', console.error);
 

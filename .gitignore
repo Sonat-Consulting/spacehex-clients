@@ -43,3 +43,4 @@ build/
 */.idea/*
 
 */.venv/*
+/spacehex-python-client/__pycache__/

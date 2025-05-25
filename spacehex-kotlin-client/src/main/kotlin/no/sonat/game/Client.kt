@@ -31,6 +31,12 @@ data class Input(
     val type = "input"
 }
 
+data class DebugData(
+    val segments : List<LineSegment2D>
+) {
+    val type = "debug"
+}
+
 data class Constants(
     val timeDeltaSeconds : Double = 0.1,
     val gravity : Double =  10.0,
@@ -52,6 +58,7 @@ class AgentClient(
     val room : String,
     val name : String,
     val strategy : (environment : Environment, state : Lander) -> Acceleration,
+    val test : Boolean,
     val joinAction : (String) -> Unit = {}) {
 
     private val logger = LoggerFactory.getLogger("Agent")
@@ -125,4 +132,19 @@ class AgentClient(
         })
         .connect()
 
+    fun sendDebug(list: List<LineSegment2D>) {
+        agent.sendText(objectMapper.writeValueAsString(DebugData(list)))
+    }
+
+}
+
+fun sendDebug(segments: List<LineSegment2D>) {
+    try {
+        val agCl = ag
+        if(agCl != null && agCl.test) {
+            agCl.sendDebug(segments)
+        }
+    } catch (ex: Exception) {
+        logger.info("Failed to send debug info due to",ex)
+    }
 }
