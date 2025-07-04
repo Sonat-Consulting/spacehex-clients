@@ -13,6 +13,7 @@ class Program
 
     static Environment? ENV;
 
+
     static Acceleration Strategy(Environment? env, Lander lander)
     {
         if (lander.Position.Y < 200)

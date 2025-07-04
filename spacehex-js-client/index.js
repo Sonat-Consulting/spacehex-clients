@@ -9,10 +9,16 @@ const room = '692pa'; // Ignored for test runs, needed for competition
 
 let currentEnv = {};
 
+/**
+ * Called approximately every 100ms, must return the wanted acceleration action.
+ * @param env the environment
+ * @param lander the lander
+ * @returns {{up: boolean, left: boolean, right: boolean}}
+ */
 function strategy(env, lander) {
   if(lander.position.y < 200) {
     sendDebug(
-        [new LineSegment2D(lander.position,env.goal)]
+        [new LineSegment2D(env.position,env.goal)]
     )
     return {
       up: true,
@@ -34,6 +40,12 @@ function strategy(env, lander) {
 let interval;
 const ws = new WebSocket(url);
 
+/**
+ * In test mode this sends line segments to the server, to then be drawn in the ui.
+ * This can be used to verify that path calculation works as expected.
+ * If over 1000 segments is sent they will be capped serverside.
+ * @param segments
+ */
 function sendDebug(segments) {
   if(url.endsWith("test")) {
     ws.send(JSON.stringify({

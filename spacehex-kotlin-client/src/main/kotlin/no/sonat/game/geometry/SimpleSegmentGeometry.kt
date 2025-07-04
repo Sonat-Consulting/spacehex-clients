@@ -5,7 +5,7 @@ import kotlin.math.*
 
 /**
  * Used for FP number comparisons
- * So we can control accuracy outside of pure FP accuracy.
+ * So we can control accuracy outside pure FP accuracy.
  */
 const val EPSILON = 0.0000001
 
